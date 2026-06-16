@@ -90,7 +90,7 @@ h2 {
   flex-wrap: wrap;
 }
 
-.header-stats span {
+.stat-pill {
   min-width: 82px;
   padding: 8px 10px;
   background: rgba(255, 255, 255, 0.1);
@@ -99,7 +99,7 @@ h2 {
   text-align: right;
 }
 
-.header-stats strong {
+.stat-pill strong {
   margin-right: 4px;
   font-size: 20px;
 }
@@ -678,7 +678,7 @@ tbody tr:hover {
     width: 100%;
   }
 
-  .header-stats > span {
+  .stat-pill {
     display: none;
   }
 
