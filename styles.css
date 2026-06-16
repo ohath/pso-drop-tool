@@ -751,4 +751,13 @@ tbody tr:hover {
   table {
     min-width: 760px;
   }
+
+  .table-shell {
+    flex: none;
+    height: 62vh;
+    max-height: 620px;
+    min-height: 360px;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
