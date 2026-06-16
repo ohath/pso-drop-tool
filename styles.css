@@ -85,6 +85,7 @@ h2 {
 
 .header-stats {
   display: flex;
+  align-items: center;
   gap: 10px;
   flex-wrap: wrap;
 }
@@ -101,6 +102,30 @@ h2 {
 .header-stats strong {
   margin-right: 4px;
   font-size: 20px;
+}
+
+.android-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 8px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fffdf8;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.android-link:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.android-link img {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
 }
 
 .layout {
@@ -554,6 +579,83 @@ tbody tr:hover {
   padding: 28px;
   color: var(--muted);
   text-align: center;
+}
+
+.android-page {
+  height: auto;
+  min-height: 100vh;
+  overflow: auto;
+}
+
+.android-header {
+  position: static;
+}
+
+.android-content {
+  width: min(920px, calc(100% - 36px));
+  margin: 28px auto 48px;
+}
+
+.android-hero,
+.android-section {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.android-hero {
+  display: grid;
+  grid-template-columns: 120px minmax(0, 1fr);
+  gap: 22px;
+  align-items: center;
+  padding: 22px;
+}
+
+.android-icon {
+  width: 112px;
+  height: 112px;
+  border-radius: 20px;
+}
+
+.android-hero h2,
+.android-section h2 {
+  margin: 0 0 10px;
+}
+
+.android-hero p,
+.android-section li {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.download-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 42px;
+  margin-top: 16px;
+  padding: 10px 16px;
+  border-radius: 6px;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.download-button:hover {
+  background: #962d26;
+}
+
+.android-section {
+  margin-top: 16px;
+  padding: 20px 22px;
+}
+
+.steps,
+.notes {
+  margin: 0;
+  padding-left: 22px;
 }
 
 @media (max-width: 860px) {
