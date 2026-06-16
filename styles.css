@@ -663,6 +663,12 @@ tbody tr:hover {
 }
 
 @media (max-width: 860px) {
+  body {
+    height: auto;
+    min-height: 100vh;
+    overflow: auto;
+  }
+
   .app-header {
     align-items: flex-start;
     flex-direction: column;
@@ -705,12 +711,20 @@ tbody tr:hover {
 
   .layout {
     grid-template-columns: 1fr;
+    height: auto;
+    overflow: visible;
     padding: 14px;
   }
 
   .filters {
     position: static;
     max-height: none;
+    overflow: visible;
+  }
+
+  .results {
+    min-height: auto;
+    overflow: visible;
   }
 
   .results-toolbar {
