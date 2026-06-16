@@ -21,8 +21,8 @@ const state = {
   query: "",
   sortMode: "area",
   viewMode: "list",
-  hideEmpty: true,
   targetsOnly: false,
+  targetPanelOpen: true,
   targets: new Set(JSON.parse(localStorage.getItem("psoDropTargets") || "[]")),
 };
 
@@ -31,13 +31,15 @@ const el = {
   difficultyButtons: document.querySelector("#difficultyButtons"),
   sectionButtons: document.querySelector("#sectionButtons"),
   allSectionsButton: document.querySelector("#allSectionsButton"),
+  allAreasButton: document.querySelector("#allAreasButton"),
   areaFilters: document.querySelector("#areaFilters"),
   queryInput: document.querySelector("#queryInput"),
   viewMode: document.querySelector("#viewMode"),
   sortMode: document.querySelector("#sortMode"),
-  hideEmpty: document.querySelector("#hideEmpty"),
-  targetsOnly: document.querySelector("#targetsOnly"),
+  showAllButton: document.querySelector("#showAllButton"),
+  showTargetsButton: document.querySelector("#showTargetsButton"),
   resetButton: document.querySelector("#resetButton"),
+  toggleTargetPanelButton: document.querySelector("#toggleTargetPanelButton"),
   clearTargetsButton: document.querySelector("#clearTargetsButton"),
   visibleCount: document.querySelector("#visibleCount"),
   targetCount: document.querySelector("#targetCount"),
@@ -96,7 +98,7 @@ function getFilteredDrops() {
     if (drop.difficulty !== state.difficulty) return false;
     if (!state.sections.has(drop.sectionId)) return false;
     if (!state.areas.has(drop.area)) return false;
-    if (state.hideEmpty && isEmptyDrop(drop)) return false;
+    if (isEmptyDrop(drop)) return false;
     if (state.targetsOnly && !state.targets.has(drop.item)) return false;
     if (!query) return true;
     return (
@@ -312,6 +314,8 @@ function renderTargets() {
   const targets = [...state.targets].sort((a, b) => a.localeCompare(b, "ja-JP"));
   el.targetCount.textContent = targets.length;
   el.targetPanel.hidden = targets.length === 0;
+  el.targetList.hidden = !state.targetPanelOpen;
+  el.toggleTargetPanelButton.textContent = `目標リスト ${targets.length}件 ${state.targetPanelOpen ? "▲" : "▼"}`;
   el.targetList.replaceChildren();
 
   targets.forEach((target) => {
@@ -335,6 +339,8 @@ function renderSummary(rows) {
   el.visibleCount.textContent = rows.length;
   el.resultsTitle.textContent = state.viewMode === "compare" ? "比較ビュー" : "一覧ビュー";
   el.resultsSummary.textContent = `${state.episode} / ${state.difficulty} / ${state.sections.size} ID / ${state.areas.size} エリア / ${items.size} アイテム / ${enemies.size} エネミー`;
+  el.showAllButton.className = state.targetsOnly ? "" : "active";
+  el.showTargetsButton.className = state.targetsOnly ? "active" : "";
 }
 
 function renderControls() {
@@ -393,6 +399,7 @@ function renderControls() {
   });
 
   el.allSectionsButton.textContent = state.sections.size === data.sectionIds.length ? "全解除" : "全選択";
+  el.allAreasButton.textContent = state.areas.size === getEpisodeAreas().length ? "全解除" : "全選択";
 
   el.areaFilters.replaceChildren();
   getEpisodeAreas().forEach((area) => {
@@ -449,6 +456,16 @@ el.allSectionsButton.addEventListener("click", () => {
   render();
 });
 
+el.allAreasButton.addEventListener("click", () => {
+  const areas = getEpisodeAreas();
+  if (state.areas.size === areas.length) {
+    state.areas = new Set([areas[0]]);
+  } else {
+    state.areas = new Set(areas);
+  }
+  render();
+});
+
 el.queryInput.addEventListener("input", () => {
   state.query = el.queryInput.value;
   render();
@@ -464,13 +481,18 @@ el.sortMode.addEventListener("change", () => {
   render();
 });
 
-el.hideEmpty.addEventListener("change", () => {
-  state.hideEmpty = el.hideEmpty.checked;
+el.showAllButton.addEventListener("click", () => {
+  state.targetsOnly = false;
   render();
 });
 
-el.targetsOnly.addEventListener("change", () => {
-  state.targetsOnly = el.targetsOnly.checked;
+el.showTargetsButton.addEventListener("click", () => {
+  state.targetsOnly = true;
+  render();
+});
+
+el.toggleTargetPanelButton.addEventListener("click", () => {
+  state.targetPanelOpen = !state.targetPanelOpen;
   render();
 });
 
@@ -482,13 +504,10 @@ el.resetButton.addEventListener("click", () => {
   state.query = "";
   state.sortMode = "area";
   state.viewMode = "list";
-  state.hideEmpty = true;
   state.targetsOnly = false;
   el.queryInput.value = "";
   el.sortMode.value = state.sortMode;
   el.viewMode.value = state.viewMode;
-  el.hideEmpty.checked = true;
-  el.targetsOnly.checked = false;
   render();
 });
 

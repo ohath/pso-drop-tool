@@ -43,59 +43,46 @@
         </section>
 
         <section class="filter-section">
-          <h2>エリア</h2>
+          <div class="section-heading">
+            <h2>エリア</h2>
+            <button id="allAreasButton" class="text-button" type="button">全選択</button>
+          </div>
           <div id="areaFilters" class="check-grid"></div>
-        </section>
-
-        <section class="filter-section">
-          <h2>検索</h2>
-          <label class="search-box">
-            <span>アイテム/エネミー</span>
-            <input id="queryInput" type="search" placeholder="例: ゴッド/バトル, ヒルデブルー" />
-          </label>
-        </section>
-
-        <section class="filter-section">
-          <h2>表示</h2>
-          <label class="control-row">
-            <span>ビュー</span>
-            <select id="viewMode">
-              <option value="list">一覧</option>
-              <option value="compare">比較</option>
-            </select>
-          </label>
-          <label class="control-row">
-            <span>並び順</span>
-            <select id="sortMode">
-              <option value="area">エリア順</option>
-              <option value="rareAsc">出にくい順</option>
-              <option value="rareDesc">出やすい順</option>
-              <option value="item">アイテム名順</option>
-            </select>
-          </label>
-          <label class="toggle-row">
-            <input id="hideEmpty" type="checkbox" checked />
-            <span>「-----」を隠す</span>
-          </label>
-          <label class="toggle-row">
-            <input id="targetsOnly" type="checkbox" />
-            <span>目標リストだけ表示</span>
-          </label>
         </section>
       </aside>
 
       <section class="results" aria-label="検索結果">
         <div class="results-toolbar">
-          <div>
+          <div class="results-heading">
             <h2 id="resultsTitle">一覧</h2>
             <p id="resultsSummary"></p>
           </div>
-          <button id="resetButton" class="text-button" type="button">条件をリセット</button>
+          <div class="toolbar-controls">
+            <label class="toolbar-search">
+              <span class="visually-hidden">アイテムまたはエネミーを検索</span>
+              <input id="queryInput" type="search" placeholder="アイテム/エネミー検索" />
+            </label>
+            <select id="viewMode" aria-label="ビュー">
+              <option value="list">一覧</option>
+              <option value="compare">比較</option>
+            </select>
+            <select id="sortMode" aria-label="並び順">
+              <option value="area">エリア順</option>
+              <option value="rareAsc">出にくい順</option>
+              <option value="rareDesc">出やすい順</option>
+              <option value="item">アイテム名順</option>
+            </select>
+            <div class="target-toggle" aria-label="表示対象">
+              <button id="showAllButton" class="active" type="button">すべて</button>
+              <button id="showTargetsButton" type="button">目標のみ</button>
+            </div>
+            <button id="resetButton" class="text-button" type="button">条件をリセット</button>
+          </div>
         </div>
 
         <div id="targetPanel" class="target-panel" hidden>
           <div class="section-heading">
-            <h2>目標リスト</h2>
+            <button id="toggleTargetPanelButton" class="target-panel-title" type="button">目標リスト</button>
             <button id="clearTargetsButton" class="text-button" type="button">全解除</button>
           </div>
           <div id="targetList" class="target-list"></div>

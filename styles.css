@@ -32,11 +32,14 @@ select {
 }
 
 .app-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  padding: 28px 32px 20px;
+  padding: 18px 32px 14px;
   background: #243634;
   color: #fffdf8;
   border-bottom: 5px solid var(--accent);
@@ -58,7 +61,7 @@ p {
 }
 
 h1 {
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1.25;
 }
 
@@ -111,8 +114,8 @@ h2 {
   gap: 14px;
   align-self: start;
   position: sticky;
-  top: 16px;
-  max-height: calc(100vh - 32px);
+  top: 108px;
+  max-height: calc(100vh - 124px);
   overflow-y: auto;
   padding-right: 6px;
   scrollbar-gutter: stable;
@@ -272,7 +275,7 @@ input[type="checkbox"] {
 
 .results-toolbar {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
   padding: 16px 18px;
@@ -281,14 +284,72 @@ input[type="checkbox"] {
   border-radius: 8px;
 }
 
+.results-heading {
+  min-width: 220px;
+}
+
 #resultsSummary {
   margin-top: 4px;
   color: var(--muted);
   font-size: 14px;
 }
 
+.toolbar-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 1;
+  flex-wrap: wrap;
+}
+
+.toolbar-search {
+  flex: 1 1 240px;
+  min-width: 180px;
+}
+
+.toolbar-controls select {
+  width: auto;
+  min-width: 118px;
+}
+
+.target-toggle {
+  display: inline-flex;
+  min-height: 38px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.target-toggle button {
+  min-width: 76px;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.target-toggle button.active {
+  background: var(--accent-2);
+  color: #fff;
+}
+
 .target-panel {
   box-shadow: none;
+}
+
+.target-panel-title {
+  min-height: 32px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  font-weight: 800;
+  text-align: left;
 }
 
 .target-list {
@@ -494,7 +555,7 @@ tbody tr:hover {
   .app-header {
     align-items: flex-start;
     flex-direction: column;
-    padding: 22px 18px;
+    padding: 16px 18px;
   }
 
   .layout {
@@ -504,11 +565,28 @@ tbody tr:hover {
 
   .filters {
     position: static;
+    max-height: none;
   }
 
   .results-toolbar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .toolbar-controls {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .toolbar-controls select,
+  .toolbar-search,
+  .toolbar-controls .text-button,
+  .target-toggle {
+    width: 100%;
+  }
+
+  .target-toggle button {
+    flex: 1;
   }
 
   table {
