@@ -23,7 +23,7 @@ const state = {
   viewMode: "list",
   targetsOnly: false,
   targetPanelOpen: true,
-  targets: new Set(JSON.parse(localStorage.getItem("psoDropTargets") || "[]")),
+  targets: new Set(loadTargets()),
 };
 
 const el = {
@@ -57,6 +57,32 @@ function getEpisodeAreas() {
 
 function saveTargets() {
   localStorage.setItem("psoDropTargets", JSON.stringify([...state.targets]));
+}
+
+function loadTargets() {
+  const stored = JSON.parse(localStorage.getItem("psoDropTargets") || "[]");
+  return stored.filter((target) => typeof target === "string" && target.includes("|"));
+}
+
+function targetKey(drop) {
+  return [
+    drop.episode,
+    drop.difficulty,
+    drop.area,
+    drop.enemy,
+    drop.enemyDropRate,
+    drop.sectionId,
+    drop.item,
+    drop.rareRate,
+  ].join("|");
+}
+
+function findDropByTargetKey(key) {
+  return data.drops.find((drop) => targetKey(drop) === key);
+}
+
+function targetLabel(drop) {
+  return `${drop.item} / ${drop.sectionId} / ${drop.enemy} / ${drop.difficulty}`;
 }
 
 function normalize(value) {
@@ -99,7 +125,7 @@ function getFilteredDrops() {
     if (!state.sections.has(drop.sectionId)) return false;
     if (!state.areas.has(drop.area)) return false;
     if (isEmptyDrop(drop)) return false;
-    if (state.targetsOnly && !state.targets.has(drop.item)) return false;
+    if (state.targetsOnly && !state.targets.has(targetKey(drop))) return false;
     if (!query) return true;
     return (
       normalize(drop.item).includes(query) ||
@@ -194,12 +220,13 @@ function renderList(rows) {
     row.className = `area-row area-${drop.area}`;
     const targetCell = document.createElement("td");
     const targetButton = document.createElement("button");
-    targetButton.className = `target-button ${state.targets.has(drop.item) ? "active" : ""}`;
+    const key = targetKey(drop);
+    targetButton.className = `target-button ${state.targets.has(key) ? "active" : ""}`;
     targetButton.type = "button";
-    targetButton.textContent = state.targets.has(drop.item) ? "★" : "☆";
-    targetButton.title = state.targets.has(drop.item) ? "目標から外す" : "目標に追加";
+    targetButton.textContent = state.targets.has(key) ? "★" : "☆";
+    targetButton.title = state.targets.has(key) ? "この行を目標から外す" : "この行を目標に追加";
     targetButton.disabled = isEmptyDrop(drop);
-    targetButton.addEventListener("click", () => toggleTarget(drop.item));
+    targetButton.addEventListener("click", () => toggleTarget(drop));
     targetCell.append(targetButton);
 
     const sectionCell = makeCell(drop.sectionId);
@@ -311,23 +338,26 @@ function renderEmptyState(colspan) {
 }
 
 function renderTargets() {
-  const targets = [...state.targets].sort((a, b) => a.localeCompare(b, "ja-JP"));
+  const targets = [...state.targets]
+    .map((key) => ({ key, drop: findDropByTargetKey(key) }))
+    .filter((target) => target.drop)
+    .sort((a, b) => targetLabel(a.drop).localeCompare(targetLabel(b.drop), "ja-JP"));
   el.targetCount.textContent = targets.length;
   el.targetPanel.hidden = targets.length === 0;
   el.targetList.hidden = !state.targetPanelOpen;
   el.toggleTargetPanelButton.textContent = `目標リスト ${targets.length}件 ${state.targetPanelOpen ? "▲" : "▼"}`;
   el.targetList.replaceChildren();
 
-  targets.forEach((target) => {
+  targets.forEach(({ key, drop }) => {
     const chip = document.createElement("span");
     chip.className = "target-chip";
     const label = document.createElement("span");
-    label.textContent = target;
+    label.textContent = targetLabel(drop);
     const button = document.createElement("button");
     button.type = "button";
     button.textContent = "×";
     button.title = "目標から外す";
-    button.addEventListener("click", () => toggleTarget(target));
+    button.addEventListener("click", () => toggleTargetByKey(key));
     chip.append(label, button);
     el.targetList.append(chip);
   });
@@ -436,12 +466,17 @@ function render() {
   }
 }
 
-function toggleTarget(item) {
-  if (!item || item === "-----") return;
-  if (state.targets.has(item)) {
-    state.targets.delete(item);
+function toggleTarget(drop) {
+  if (!drop || isEmptyDrop(drop)) return;
+  toggleTargetByKey(targetKey(drop));
+}
+
+function toggleTargetByKey(key) {
+  if (!key) return;
+  if (state.targets.has(key)) {
+    state.targets.delete(key);
   } else {
-    state.targets.add(item);
+    state.targets.add(key);
   }
   saveTargets();
   render();
