@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ゲームキューブ版 ファンタシースターオンライン エピソード1&2 武器ドロップテーブル</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <div>
+        <p class="eyebrow">ゲームキューブ版 ファンタシースターオンライン エピソード1&2</p>
+        <h1>武器ドロップテーブル</h1>
+        <p class="visually-hidden">
+          GC版 Phantasy Star Online Episode 1 and 2 weapon drop table.
+          GameCube PSO Episode I & II rare item drop table.
+        </p>
+      </div>
+      <div class="header-stats" aria-live="polite">
+        <span><strong id="visibleCount">0</strong>件</span>
+        <span><strong id="targetCount">0</strong>目標</span>
+      </div>
+    </header>
+
+    <main class="layout">
+      <aside class="filters" aria-label="絞り込み">
+        <section class="filter-section">
+          <h2>Episode</h2>
+          <div id="episodeButtons" class="segmented"></div>
+        </section>
+
+        <section class="filter-section">
+          <h2>難易度</h2>
+          <div id="difficultyButtons" class="segmented"></div>
+        </section>
+
+        <section class="filter-section">
+          <div class="section-heading">
+            <h2>セクションID</h2>
+            <button id="allSectionsButton" class="text-button" type="button">全選択</button>
+          </div>
+          <div id="sectionButtons" class="section-grid"></div>
+        </section>
+
+        <section class="filter-section">
+          <h2>エリア</h2>
+          <div id="areaFilters" class="check-grid"></div>
+        </section>
+
+        <section class="filter-section">
+          <h2>検索</h2>
+          <label class="search-box">
+            <span>アイテム/エネミー</span>
+            <input id="queryInput" type="search" placeholder="例: ゴッド/バトル, ヒルデブルー" />
+          </label>
+        </section>
+
+        <section class="filter-section">
+          <h2>表示</h2>
+          <label class="control-row">
+            <span>ビュー</span>
+            <select id="viewMode">
+              <option value="list">一覧</option>
+              <option value="compare">比較</option>
+            </select>
+          </label>
+          <label class="control-row">
+            <span>並び順</span>
+            <select id="sortMode">
+              <option value="area">エリア順</option>
+              <option value="rareAsc">出にくい順</option>
+              <option value="rareDesc">出やすい順</option>
+              <option value="item">アイテム名順</option>
+            </select>
+          </label>
+          <label class="toggle-row">
+            <input id="hideEmpty" type="checkbox" checked />
+            <span>「-----」を隠す</span>
+          </label>
+          <label class="toggle-row">
+            <input id="targetsOnly" type="checkbox" />
+            <span>目標リストだけ表示</span>
+          </label>
+        </section>
+      </aside>
+
+      <section class="results" aria-label="検索結果">
+        <div class="results-toolbar">
+          <div>
+            <h2 id="resultsTitle">一覧</h2>
+            <p id="resultsSummary"></p>
+          </div>
+          <button id="resetButton" class="text-button" type="button">条件をリセット</button>
+        </div>
+
+        <div id="targetPanel" class="target-panel" hidden>
+          <div class="section-heading">
+            <h2>目標リスト</h2>
+            <button id="clearTargetsButton" class="text-button" type="button">全解除</button>
+          </div>
+          <div id="targetList" class="target-list"></div>
+        </div>
+
+        <div class="table-shell">
+          <table id="resultTable">
+            <thead id="tableHead"></thead>
+            <tbody id="tableBody"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script src="./data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
